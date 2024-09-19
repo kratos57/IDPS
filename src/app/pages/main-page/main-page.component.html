@@ -1,0 +1,46 @@
+<div class="main-container">
+  <!-- Presentation Section -->
+  <section class="presentation">
+    <h1>Welcome to Our Room Creation Platform</h1>
+    <p>
+      Create and manage your rooms with ease. Invite friends to join and collaborate seamlessly. Our platform ensures a smooth and engaging experience for all users.
+    </p>
+    <img src="assets/images/idps.jpg" alt="Room Creation" class="presentation-image">
+  </section>
+
+  <!-- Room Creation Section -->
+  <div class="room-creation">
+    <h2>Create Your Room</h2>
+
+    <!-- Input field to capture the creator's name -->
+    <input type="text" [(ngModel)]="creatorName" placeholder="Enter your name" class="input-field" />
+
+    <button (click)="createRoom()" class="btn btn-primary">Create Room</button>
+
+    <!-- Show room code once it's created -->
+    <div *ngIf="roomCode" class="room-code-display">
+      <p>Room code:</p>
+      <span>{{ roomCode }}</span>
+    </div>
+
+    <!-- Invite friend section (only visible when the room is created) -->
+    <div *ngIf="roomCode" class="invite-section">
+      <input type="email" [(ngModel)]="friendEmail" placeholder="Invite a friend by email" class="input-field" />
+      <button (click)="inviteFriend()" class="btn btn-secondary">Invite Friend</button>
+    </div>
+
+    <!-- Submit room code form -->
+    <div class="room-code-submit">
+    <!-- Input field for room code -->
+<input type="text" [(ngModel)]="enteredRoomCode" placeholder="Enter room code" class="input-field" />
+
+<!-- Button to join room -->
+<button (click)="joinRoom()" class="btn btn-primary">Join Room</button>
+
+    </div>
+
+    <!-- Display error message if the room code is invalid -->
+    <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+  </div>
+</div>
+

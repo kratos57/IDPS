@@ -1,0 +1,33 @@
+<div class="login-container">
+  <div class="login-left">
+    <h2>Sign-up! 👋</h2>
+    <p>How do I get started?</p>
+
+    <form (ngSubmit)="onRegister()">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" [(ngModel)]="username" placeholder="test" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" [(ngModel)]="email" placeholder="test@atheros.ai" required>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" [(ngModel)]="password" placeholder="******" required>
+
+      <label for="confirm-password">Confirm Password</label>
+      <input type="password" id="confirm-password" name="confirm-password" [(ngModel)]="confirmPassword" placeholder="******" required>
+
+      <button type="submit" class="btn btn-signup">Sign Up</button>
+    </form>
+
+
+    <p>Do you have an account? <a href="signin">Sign In Now</a></p>
+  </div>
+
+  <div class="login-right">
+    <div class="login-info">
+      <h3>Why should I login?</h3>
+      <p>By logging in, you can access your personal dashboard, where you can manage your account, view your profile, and much more.</p>
+      <img src="assets/images/idps.jpg" alt="IDPS ">
+    </div>
+  </div>
+</div>

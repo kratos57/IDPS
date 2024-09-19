@@ -1,0 +1,104 @@
+<div class="container">
+  <!-- File Upload Section -->
+  <section class="upload-section">
+    <h2 class="section-title">Upload Document</h2>
+    <div class="upload-container">
+      <input type="file" (change)="onFileChange($event)" class="file-input" />
+      <button (click)="onUpload()" class="upload-button">Upload</button>
+    </div>
+  </section>
+
+  <!-- Display the Uploaded File and Its Category -->
+  <section *ngIf="uploadedFileUrl" class="file-display-section">
+    <h3>Uploaded File</h3>
+    <a [href]="uploadedFileUrl" target="_blank" class="file-link">View File</a>
+    <div *ngIf="uploadedFileCategory" class="file-category">
+      <strong>Category:</strong> {{ uploadedFileCategory }}
+    </div>
+  </section>
+
+  <!-- Filters Section -->
+  <section class="filters-section">
+    <h2 class="section-title">Filters</h2>
+    <div class="filters">
+      <div class="filter-group">
+        <label for="date">Date:</label>
+        <input type="date" id="date" [(ngModel)]="filterDate" (change)="fetchFiles()" class="filter-input"/>
+      </div>
+      <div class="filter-group">
+        <label for="category">Category:</label>
+        <select id="category" [(ngModel)]="filterCategory" (change)="fetchFiles()" class="filter-select">
+          <option value="">All</option>
+          <option value="Invoice">Invoice</option>
+          <option value="Contract">Contract</option>
+          <!-- Add more categories as needed -->
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="fileType">File Type:</label>
+        <select id="fileType" [(ngModel)]="filterFileType" (change)="fetchFiles()" class="filter-select">
+          <option value="">All</option>
+          <option value="image/png">PNG</option>
+          <option value="image/jpeg">JPEG</option>
+          <!-- Add more file types as needed -->
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="sortBy">Sort By:</label>
+        <select id="sortBy" [(ngModel)]="sortBy" (change)="fetchFiles()" class="filter-select">
+          <option value="">None</option>
+          <option value="name">Name</option>
+          <option value="date">Date</option>
+          <option value="relevance">Relevance</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- Document List Section -->
+  <section *ngIf="files.length > 0" class="files-list-section">
+    <h2 class="section-title">Uploaded Files</h2>
+    <ul class="file-list">
+      <li *ngFor="let file of files" class="file-item">
+        <div class="file-thumbnail-container">
+          <img [src]="'http://localhost:5000/uploads/' + file.path" *ngIf="file.mimetype.startsWith('image/')" alt="{{ file.filename }}" class="file-thumbnail"/>
+        </div>
+        <div class="file-info">
+          <a [href]="'http://localhost:5000/uploads/' + file.path" target="_blank" class="file-link">{{ file.filename }}</a>
+
+          <div *ngIf="file.category" class="file-category">
+            <strong>Category:</strong> {{ file.category }}
+          </div>
+          <div *ngIf="file.uploadDate" class="file-date">
+            <strong>Date:</strong> {{ file.uploadDate | date:'shortDate' }}
+          </div>
+
+<!-- Add these buttons inside the *ngFor loop for each file item -->
+<button *ngIf="file.lockedBy !== userId" (click)="lockFile(file.filename)" class="lock-button">Lock</button>
+<button *ngIf="file.lockedBy === userId" (click)="unlockFile(file.filename)" class="unlock-button">Unlock</button>
+<button (click)="deleteFile(file.filename)" [disabled]="file.lockedBy && file.lockedBy !== userId" class="delete-button">Delete</button>
+          <button (click)="viewVersions(file.filename)" class="view-versions-button">View Versions</button>
+        </div>
+
+        <!-- Versions List -->
+        <div *ngIf="selectedFile === file.filename && versions.length > 0" class="versions-list">
+          <h4>Version History:</h4>
+          <ul>
+            <li *ngFor="let version of versions" class="version-item">
+              <strong>Version {{ version.versionNumber }}:</strong>
+              <span>{{ version.uploadDate | date:'shortDate' }}</span>
+              <button (click)="revertVersion(file.filename, version.versionNumber)" class="revert-button">Revert</button>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Add New Version -->
+        <div *ngIf="selectedFile === file.filename" class="add-version">
+          <input type="file" (change)="onFileChange($event)" class="file-input" />
+          <button (click)="onUpdateVersion()" class="upload-button">Upload New Version</button>
+        </div>
+      </li>
+    </ul>
+  </section>
+</div>
+
